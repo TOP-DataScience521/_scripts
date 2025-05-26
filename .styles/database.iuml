@@ -1,0 +1,56 @@
+''
+'' An extension for rendering database diagrams
+''
+'' Original Author: https://github.com/GennDALF
+''
+'' NB: colors and fonts match Monokai style for Notepad++ (puml-theme-monokai_npp.puml)
+''
+
+@startuml
+
+!if (%not(%variable_exists("$FONT_SIZE_LARGER")))
+    !$FONT_SIZE_LARGER = 18
+!endif
+
+!if (%not(%variable_exists("$FONT_DARK")))
+    !$FONT_DARK = "8e8e8d"
+!endif
+
+
+!procedure $table($name)
+    class $name as "<size:$FONT_SIZE_LARGER>** $name **</size>"
+!endprocedure
+
+
+!procedure $pk($name)
+    <&key> **$name**
+!endprocedure
+
+!procedure $fk($name)
+    <&external-link> $name
+!endprocedure
+
+!procedure $fp($name)
+    <&external-link> **$name**
+!endprocedure
+
+!procedure $fz($name)
+    <color:$FONT_DARK><&external-link> $name</color>
+!endprocedure
+
+!procedure $nn($name)
+    <&media-record> $name
+!endprocedure
+
+!procedure $nu($name)
+    <U+25cc><font:Brass Mono><size:21> </size></font><color:$FONT_DARK>$name</color>
+!endprocedure
+
+
+skinparam classAttributeFontName "Space Mono"
+skinparam linetype ortho
+
+hide class methods
+hide class circle
+
+@enduml
