@@ -1,0 +1,41 @@
+@startuml
+
+!theme monokai_npp from ..\.styles
+scale 1.5
+
+hide class empty field
+
+class Proteus {
+    +{static}move()
+    +{static}eat()
+    +{static}reproduce()
+}
+
+class Fish {
+    +{static}breath()
+}
+
+class Reptiles {
+    +{static}hide()
+}
+
+class Bird {
+    +{static}fly()
+}
+
+class Mammal {
+    +{static}care()
+}
+
+class Human {
+    +{static}speak()
+}
+
+Proteus <|-- Fish
+Fish <|-- Reptiles
+Reptiles <|-- Bird
+Reptiles <|-- Mammal
+Mammal <|-- Human
+
+@enduml
+
