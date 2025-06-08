@@ -1,0 +1,46 @@
+@startuml
+
+!include ..\..\.styles\database.iuml
+!theme monokai_npp from ..\..\.styles
+scale 1.5
+
+$table(authors) {
+    $pk(id)
+    $nn(last_name)
+    $nn(first_name)
+}
+
+$table(books) {
+    $pk(id)
+    $fk(author_id)
+    $nn(title)
+}
+
+$table(publishers) {
+    $pk(id)
+    $nn(name)
+}
+
+$table(books_publishers) {
+    $pk(isbn)
+    $fk(book_id)
+    $fk(publisher_id)
+}
+
+' +---------+--------------+
+' | book_id | publisher_id |
+' +---------+--------------+
+' |    1    |       1      |
+' |    1    |       2      |
+' |    2    |       1      |
+' |    3    |       2      |
+' +---------+--------------+
+
+authors ||--|{ books
+
+' publishers }|--|{ books
+
+publishers ||--|{ books_publishers
+books ||-right-|{ books_publishers
+
+@enduml
