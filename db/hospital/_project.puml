@@ -1,0 +1,66 @@
+@startuml
+
+!include ..\..\.styles\database.iuml
+!theme monokai_npp from ..\..\.styles
+scale 1.25
+
+$table(departments) {
+    $pk(id)
+    $nn(name)
+}
+
+$table(wards) {
+    $pk(id)
+    $fk(dep_id)
+    $nn(name)
+}
+
+$table(doctors) {
+    $pk(id)
+    $fk(dep_id)
+    $nn(last_name)
+    $nn(first_name)
+    $nn(patr_name)
+    $nn(salary)
+    $nn(premium)
+}
+
+$table(specializations) {
+    $pk(id)
+    $nn(name)
+}
+
+$table(doctors_specs) {
+    $fk(doctor_id)
+    $fk(spec_id)
+}
+
+$table(vacations) {
+    $pk(id)
+    $fk(doctor_id)
+    $nn(start_date)
+    $nn(end_date)
+}
+
+$table(sponsors) {
+    $pk(id)
+    $nn(name)
+}
+
+$table(donations) {
+    $pk(id)
+    $fk(sponsor_id)
+    $fk(dep_id)
+    $nn(date)
+    $nn(amount)
+}
+
+doctors }|-left-|| departments
+wards }|--|| departments
+donations }|-up-|| departments
+donations }|-right-|| sponsors
+vacations }|--|| doctors
+doctors_specs }|-left-|| doctors
+doctors_specs }|-up-|| specializations
+
+@enduml
