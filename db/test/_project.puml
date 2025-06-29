@@ -1,0 +1,20 @@
+@startuml
+
+!include ..\..\.styles\database.iuml
+!theme monokai_npp from ..\..\.styles
+scale 1.5
+
+$table(t1) {
+    $pk(t1_id)
+    $nn(test1)
+}
+
+$table(t2) {
+    $pk(t2_id)
+    $fk(t1_id)
+    $nn(test2)
+}
+
+t2 }|-left-|| t1
+
+@enduml
