@@ -1,3 +1,14 @@
+__all__ = [
+    'sample',
+    'X',
+    'm',
+    'W',
+    'X_intervals',
+    'm_intervals',
+    'X_intervals_means',
+]
+
+
 from numpy import array, count_nonzero, sort, where
 
 from random import randint
