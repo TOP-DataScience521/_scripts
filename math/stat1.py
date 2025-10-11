@@ -52,40 +52,49 @@ sample_ = array([
 
 # переход от дискретного статистического ряда к интервальному статистическому ряду
 X_intervals = [(10, 12), (12, 14), (14, 16), (16, 18), (18, 20)]
-m_intervals = []
-# для первого интервала
-x1, x2 = X_intervals[0]
-m_total = 0
-for x in X:
-    i = where(X == x)[0][0]
-    if x1 <= x < x2:
-        m_total += m[i]
-    elif x == x2:
-        m_total += sum(divmod(m[i], 2))
-m_intervals.append(m_total)
-# для промежуточных интервалов
-for x1, x2 in X_intervals[1:-1]:
+
+def sample_to_interval(sample, intervals):
+    sample = list(sample)
+    X = array(sorted(set(sample)))
+    M = [sample.count(elem) for elem in X]
+    
+    m_intervals = []
+    # для первого интервала
+    x1, x2 = intervals[0]
+    m_total = 0
+    for x in X:
+        i = where(X == x)[0][0]
+        if x1 <= x < x2:
+            m_total += M[i]
+        elif x == x2:
+            m_total += sum(divmod(M[i], 2))
+    m_intervals.append(m_total)
+    # для промежуточных интервалов
+    for x1, x2 in intervals[1:-1]:
+        m_total = 0
+        for x in X:
+            i = where(X == x)[0][0]
+            if x == x1:
+                m_total += divmod(M[i], 2)[0]
+            elif x1 < x < x2:
+                m_total += M[i]
+            elif x == x2:
+                m_total += sum(divmod(M[i], 2))
+        m_intervals.append(m_total)
+    # для последнего интервала
+    x1, x2 = intervals[-1]
     m_total = 0
     for x in X:
         i = where(X == x)[0][0]
         if x == x1:
-            m_total += divmod(m[i], 2)[0]
-        elif x1 < x < x2:
-            m_total += m[i]
-        elif x == x2:
-            m_total += sum(divmod(m[i], 2))
+            m_total += divmod(M[i], 2)[0]
+        elif x1 < x <= x2:
+            m_total += M[i]
     m_intervals.append(m_total)
-# для последнего интервала
-x1, x2 = X_intervals[-1]
-m_total = 0
-for x in X:
-    i = where(X == x)[0][0]
-    if x == x1:
-        m_total += divmod(m[i], 2)[0]
-    elif x1 < x <= x2:
-        m_total += m[i]
-m_intervals.append(m_total)
+    return m_intervals
 
+
+m_intervals = sample_to_interval(sample, X_intervals)
 
 # переход от интервального статистического ряда к дискретному статистическому ряду со средними значениями интервалов
 X_intervals_means = [sum(interval)/2 for interval in X_intervals]
