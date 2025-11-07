@@ -1,4 +1,4 @@
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from breast_cancer_init import data, target
 
@@ -42,42 +42,81 @@ data_norm = (data - data.describe().loc['mean', :]) / data.describe().loc['std',
 mean_0 = data_norm[target == 0].mean()
 mean_1 = data_norm[target == 1].mean()
 
-groupped_means_diffs = DataFrame({
-    'mean_0': mean_0,
-    'mean_1': mean_1,
-    'diff': abs(mean_0 - mean_1)
-}).sort_values(by='diff', ascending=False)
+corr_kendall = Series([
+    target.corr(data[var], method='kendall')
+    for var in data.columns
+], name='tau_corr', index=data.columns)
 
-# >>> groupped_means_diffs
-#                            mean_0    mean_1      diff
-# worst concave points     1.028886 -0.610991  1.639877
-# worst perimeter          1.015076 -0.602790  1.617865
-# mean concave points      1.006907 -0.597939  1.604846
-# worst radius             1.006699 -0.597816  1.604515
-# mean perimeter           0.962853 -0.571778  1.534631
-# worst area               0.951430 -0.564995  1.516424
-# mean radius              0.946507 -0.562072  1.508579
-# mean area                0.919222 -0.545869  1.465091
-# mean concavity           0.902855 -0.536149  1.439004
-# worst concavity          0.855208 -0.507854  1.363062
-# mean compactness         0.773427 -0.459290  1.232717
-# worst compactness        0.766250 -0.455028  1.221278
-# radius error             0.735309 -0.436654  1.171963
-# perimeter error          0.721056 -0.428190  1.149246
-# area error               0.710807 -0.422104  1.132911
-# worst texture            0.592390 -0.351784  0.944174
-# worst smoothness         0.546444 -0.324499  0.870943
-# worst symmetry           0.539740 -0.320518  0.860258
-# mean texture             0.538302 -0.319664  0.857966
-# concave points error     0.529041 -0.314164  0.843206
-# mean smoothness          0.464886 -0.276066  0.740952
-# mean symmetry            0.428503 -0.254461  0.682964
-# worst fractal dimension  0.419912 -0.249359  0.669271
-# compactness error        0.379884 -0.225589  0.605473
-# concavity error          0.328969 -0.195354  0.524324
-# fractal dimension error  0.101094 -0.060033  0.161127
-# smoothness error        -0.086889  0.051598  0.138486
-# mean fractal dimension  -0.016644  0.009884  0.026528
-# texture error           -0.010766  0.006393  0.017159
-# symmetry error          -0.008456  0.005021  0.013477
+vars_by_effect_on_target = DataFrame({
+    # 'mean_0': mean_0,
+    # 'mean_1': mean_1,
+    'diff': abs(mean_0 - mean_1).round(2),
+    'tau_corr': abs(corr_kendall).round(3),
+})
+
+# >>> vars_by_effect_on_target.sort_values(by='diff', ascending=False)
+#                          diff  tau_corr
+# worst concave points     1.64     0.639
+# worst perimeter          1.62     0.651
+# mean concave points      1.60     0.636
+# worst radius             1.60     0.644
+# mean perimeter           1.53     0.612
+# worst area               1.52     0.643
+# mean radius              1.51     0.599
+# mean area                1.47     0.600
+# mean concavity           1.44     0.599
+# worst concavity          1.36     0.577
+# mean compactness         1.23     0.498
+# worst compactness        1.22     0.496
+# radius error             1.17     0.504
+# perimeter error          1.15     0.515
+# area error               1.13     0.584
+# worst texture            0.94     0.390
+# worst smoothness         0.87     0.348
+# worst symmetry           0.86     0.324
+# mean texture             0.86     0.378
+# concave points error     0.84     0.400
+# mean smoothness          0.74     0.304
+# mean symmetry            0.68     0.272
+# worst fractal dimension  0.67     0.255
+# compactness error        0.61     0.311
+# concavity error          0.52     0.384
+# fractal dimension error  0.16     0.165
+# smoothness error         0.14     0.043
+# mean fractal dimension   0.03     0.021
+# texture error            0.02     0.016
+# symmetry error           0.01     0.075
+
+# >>> vars_by_effect_on_target.sort_values(by='tau_corr', ascending=False)
+#                          diff  tau_corr
+# worst perimeter          1.62     0.651
+# worst radius             1.60     0.644
+# worst area               1.52     0.643
+# worst concave points     1.64     0.639
+# mean concave points      1.60     0.636
+# mean perimeter           1.53     0.612
+# mean area                1.47     0.600
+# mean radius              1.51     0.599
+# mean concavity           1.44     0.599
+# area error               1.13     0.584
+# worst concavity          1.36     0.577
+# perimeter error          1.15     0.515
+# radius error             1.17     0.504
+# mean compactness         1.23     0.498
+# worst compactness        1.22     0.496
+# concave points error     0.84     0.400
+# worst texture            0.94     0.390
+# concavity error          0.52     0.384
+# mean texture             0.86     0.378
+# worst smoothness         0.87     0.348
+# worst symmetry           0.86     0.324
+# compactness error        0.61     0.311
+# mean smoothness          0.74     0.304
+# mean symmetry            0.68     0.272
+# worst fractal dimension  0.67     0.255
+# fractal dimension error  0.16     0.165
+# symmetry error           0.01     0.075
+# smoothness error         0.14     0.043
+# mean fractal dimension   0.03     0.021
+# texture error            0.02     0.016
 
