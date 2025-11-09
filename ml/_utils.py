@@ -11,3 +11,11 @@ def concatenate_lines(*columns, column_width: int = 40, separator: str = ' | '):
         ]))
     return '\n'.join(paragraph)
 
+
+Point = tuple[float, float]
+
+def euclid_dist(point1: Point, point2: Point):
+    x1, y1 = point1
+    x2, y2 = point2
+    return ((x1 - x2)**2 + (y1 - y2)**2)**0.5
+
