@@ -111,7 +111,7 @@ for j in range(7):
     for points_cluster_k in points_by_clusters:
         axs.scatter(*points_cluster_k.T, s=10)
     axs.scatter(centroids_old.T[0], centroids_old.T[1], c='#ee1111', marker='v')
-    axs.scatter(centroids.T[0], centroids.T[1], c='#ee1111bb', marker='v')
+    axs.scatter(centroids.T[0], centroids.T[1], c='#ee111133', marker='v')
     fig.canvas.flush_events()
     sleep(2/speed)
     # ==================== отрисовка кадра ====================
